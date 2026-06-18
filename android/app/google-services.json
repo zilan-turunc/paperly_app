@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_number": "995054416755",
+    "project_id": "paperly-499610",
+    "storage_bucket": "paperly-499610.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995054416755:android:04e823e586264af5086ba5",
+        "android_client_info": {
+          "package_name": "com.zilan.paperly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995054416755-g6ql7nilbc1k3naafp2d5inun881kf7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zilan.paperly",
+            "certificate_hash": "d73b5c28255b5c349583c3178b5b6a0bda48e425"
+          }
+        },
+        {
+          "client_id": "995054416755-ep0d1aj8816raiq0q3mj3m3b3u23juj7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAintWGqHR4DoXCKGxjjocLCBLS7078NNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995054416755-ep0d1aj8816raiq0q3mj3m3b3u23juj7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "995054416755-lghs7ktpls2h8oeoq5tsmdvk3tr2jnom.apps.googleusercontent.com",
+              "client_type": 2
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
