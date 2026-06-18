@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/env.dart';
+import '../../data/remote/supabase_sync.dart';
+import '../daily/daily_provider.dart';
 
 final authStateProvider = StreamProvider<AuthState?>((ref) {
   if (!Env.hasSupabase) return Stream.value(null);
@@ -9,6 +11,7 @@ final authStateProvider = StreamProvider<AuthState?>((ref) {
 });
 
 final currentUserProvider = Provider<User?>((ref) {
+  ref.watch(authStateProvider); // re-evaluate on every auth change
   if (!Env.hasSupabase) return null;
   return Supabase.instance.client.auth.currentUser;
 });
@@ -17,12 +20,20 @@ class AuthNotifier extends AsyncNotifier<void> {
   @override
   Future<void> build() async {}
 
+  SupabaseSync get _sync => ref.read(syncServiceProvider);
+
+  Future<void> _onSignedIn() async {
+    await _sync.clearLocalData();
+    await _sync.sync();
+  }
+
   Future<void> signInWithEmail(String email, String password) async {
     if (!Env.hasSupabase) throw Exception('Auth not configured');
     await Supabase.instance.client.auth.signInWithPassword(
       email: email,
       password: password,
     );
+    await _onSignedIn();
   }
 
   Future<void> signUpWithEmail(String email, String password) async {
@@ -31,6 +42,8 @@ class AuthNotifier extends AsyncNotifier<void> {
       email: email,
       password: password,
     );
+    // only sync if sign-up results in an immediate session (email confirmation off)
+    if (Supabase.instance.client.auth.currentUser != null) await _onSignedIn();
   }
 
   Future<void> signInWithGoogle() async {
@@ -53,6 +66,7 @@ class AuthNotifier extends AsyncNotifier<void> {
       idToken: auth.idToken!,
       accessToken: auth.accessToken,
     );
+    await _onSignedIn();
   }
 
   Future<void> resetPassword(String email) async {
@@ -62,6 +76,7 @@ class AuthNotifier extends AsyncNotifier<void> {
 
   Future<void> signOut() async {
     if (!Env.hasSupabase) return;
+    await _sync.clearLocalData();
     await Supabase.instance.client.auth.signOut();
   }
 }

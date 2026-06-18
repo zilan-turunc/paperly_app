@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme.dart';
 import '../../core/env.dart';
 import '../auth/auth_provider.dart';
@@ -48,7 +49,7 @@ class ProfileSheet extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushNamed('/auth');
+                context.push('/auth');
               },
               child: const Text('Sign in'),
             ),

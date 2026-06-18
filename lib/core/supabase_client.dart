@@ -9,5 +9,8 @@ Future<void> initSupabase() async {
     url: Env.supabaseUrl,
     // ignore: deprecated_member_use
     anonKey: Env.supabaseAnonKey,
+    authOptions: const FlutterAuthClientOptions(
+      authFlowType: AuthFlowType.pkce,
+    ),
   );
 }

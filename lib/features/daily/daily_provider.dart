@@ -5,6 +5,15 @@ import 'package:uuid/uuid.dart';
 import '../../data/local/database.dart';
 import '../../data/remote/supabase_sync.dart';
 
+enum SyncStatus { idle, syncing, error }
+
+final syncStatusProvider = StateProvider<SyncStatus>((ref) => SyncStatus.idle);
+
+final syncServiceProvider = Provider<SupabaseSync>((ref) {
+  final db = ref.watch(databaseProvider);
+  return SupabaseSync(db: db);
+});
+
 const _uuid = Uuid();
 
 final databaseProvider = Provider<AppDatabase>((ref) {

@@ -37,7 +37,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         await notifier.signInWithEmail(
             _emailController.text.trim(), _passwordController.text);
       }
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_isSignUp ? 'Account created — welcome!' : 'Signed in successfully'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        Navigator.of(context).pop();
+      }
     } catch (e) {
       setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
     } finally {
@@ -49,7 +57,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     setState(() { _googleLoading = true; _error = null; });
     try {
       await ref.read(authNotifierProvider.notifier).signInWithGoogle();
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Signed in with Google'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        Navigator.of(context).pop();
+      }
     } catch (e) {
       final msg = e.toString().replaceFirst('Exception: ', '');
       if (msg != 'Sign in cancelled') {

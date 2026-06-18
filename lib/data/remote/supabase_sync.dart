@@ -1,21 +1,10 @@
 import 'package:drift/drift.dart' show Value;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../local/database.dart';
 import '../../core/env.dart';
-import '../../features/daily/daily_provider.dart';
 
 const _lastPullKey = 'last_pull_time';
-
-enum SyncStatus { idle, syncing, error }
-
-final syncStatusProvider = StateProvider<SyncStatus>((ref) => SyncStatus.idle);
-
-final syncServiceProvider = Provider<SupabaseSync>((ref) {
-  final db = ref.watch(databaseProvider);
-  return SupabaseSync(db: db);
-});
 
 class SupabaseSync {
   final AppDatabase db;
@@ -143,5 +132,11 @@ class SupabaseSync {
   Future<void> _setLastPullTime(DateTime t) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_lastPullKey, t.millisecondsSinceEpoch);
+  }
+
+  Future<void> clearLocalData() async {
+    await db.clearAllData();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_lastPullKey);
   }
 }

@@ -55,6 +55,14 @@
 				<string>com.googleusercontent.apps.995054416755-lghs7ktpls2h8oeoq5tsmdvk3tr2jnom</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.zilan.paperly</string>
+			</array>
+		</dict>
 	</array>
 </dict>
 </plist>

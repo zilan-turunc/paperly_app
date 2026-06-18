@@ -133,6 +133,11 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> upsertTimeBlock(TimeBlocksCompanion block) =>
       into(timeBlocks).insertOnConflictUpdate(block);
+
+  Future<void> clearAllData() async {
+    await delete(todos).go();
+    await delete(timeBlocks).go();
+  }
 }
 
 DateTime _dayOnly(DateTime d) => DateTime.utc(d.year, d.month, d.day);
