@@ -4,7 +4,7 @@
 
 A minimal daily planner for people who want focus, not features. Each day gets its own page — a to-do list and a color-coded time-block schedule. An AI assistant turns a quick brain dump into a structured plan. Works fully offline; optionally syncs across devices via Supabase.
 
-**Website:** _coming soon_
+**Website:** [Click here!](https://zilan-turunc.github.io/paperly_app/)
 
 ---
 
