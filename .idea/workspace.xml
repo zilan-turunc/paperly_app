@@ -6,14 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4a86d44e-0367-4171-8562-d71dd5f4ff14" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/core/supabase_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/supabase_client.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/local/database.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/local/database.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/remote/supabase_sync.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/remote/supabase_sync.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/auth_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/auth_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/auth/auth_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/auth/auth_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/daily/daily_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/daily/daily_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/profile/profile_sheet.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/profile/profile_sheet.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/router.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/router.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/onboarding/onboarding_flow.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/onboarding/onboarding_flow.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

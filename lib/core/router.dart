@@ -5,7 +5,7 @@ import '../features/auth/auth_screen.dart';
 import '../features/onboarding/onboarding_flow.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/loading',
+  initialLocation: '/onboarding',
   routes: [
     GoRoute(
       path: '/loading',
@@ -43,10 +43,9 @@ class _LoadingScreenState extends State<_LoadingScreen> {
   }
 
   Future<void> _init() async {
-    final onboarded = await checkOnboarded();
-    if (mounted) {
-      context.go(onboarded ? '/daily' : '/onboarding');
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.go('/onboarding');
+    });
   }
 
   @override

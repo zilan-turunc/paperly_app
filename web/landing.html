@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paperly — Your day, on paper.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F5F1EB;
+      --surface:   #FFFFFF;
+      --text:      #1A1A1A;
+      --muted:     #6B6B6B;
+      --placeholder: #BCBCBC;
+      --border:    #E0DAD0;
+      --accent:    #3D5A80;
+      --accent-light: #5B7BA8;
+      --slate:     #8BA0B4;
+      --sage:      #7DA68A;
+      --terracotta:#C17A5A;
+      --lavender:  #9A8FB5;
+      --sand:      #C4A882;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo { font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: -0.3px; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { text-decoration: none; color: var(--muted); font-size: 14px; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 4px;
+      padding: 8px 18px; font-size: 14px; font-weight: 500;
+      cursor: pointer; text-decoration: none; transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--accent-light); }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      max-width: 760px; margin: 0 auto;
+      padding: 100px 32px 80px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 12px; font-weight: 600; letter-spacing: 1.2px;
+      color: var(--accent); text-transform: uppercase;
+      background: rgba(61,90,128,.08);
+      padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -1.5px; color: var(--text);
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 18px; color: var(--muted);
+      max-width: 520px; margin: 0 auto 40px;
+    }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 4px;
+      padding: 14px 28px; font-size: 15px; font-weight: 500;
+      cursor: pointer; text-decoration: none; transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--accent-light); }
+    .btn-secondary {
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 14px 28px; font-size: 15px;
+      cursor: pointer; text-decoration: none; transition: all .2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── MOCK PHONE ───────────────────────────────────── */
+    .phone-wrap {
+      display: flex; justify-content: center;
+      padding: 0 32px 80px;
+    }
+    .phone {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.09);
+      width: 280px; padding: 28px 20px;
+      position: relative; overflow: hidden;
+    }
+    .phone-notch {
+      width: 80px; height: 8px;
+      background: var(--border); border-radius: 4px;
+      margin: 0 auto 20px;
+    }
+    .phone-date { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+    .phone-title { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+    .phone-section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+    }
+    .todo-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 0; border-bottom: 1px solid var(--border);
+      font-size: 13px; color: var(--text);
+    }
+    .todo-item:last-child { border-bottom: none; }
+    .todo-check {
+      width: 14px; height: 14px; border: 1.5px solid var(--accent);
+      border-radius: 3px; flex-shrink: 0;
+    }
+    .todo-check.done {
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .todo-check.done::after { content: '✓'; color: #fff; font-size: 9px; }
+    .todo-text.done { text-decoration: line-through; color: var(--placeholder); }
+    .phone-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+    .block-item {
+      display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start;
+    }
+    .block-bar { width: 4px; border-radius: 2px; align-self: stretch; flex-shrink: 0; }
+    .block-info { flex: 1; }
+    .block-time { font-size: 10px; color: var(--muted); }
+    .block-name { font-size: 13px; font-weight: 500; }
+
+    /* ── FEATURES GRID ────────────────────────────────── */
+    .section { max-width: 960px; margin: 0 auto; padding: 0 32px 100px; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header h2 { font-size: 32px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 12px; }
+    .section-header p { color: var(--muted); font-size: 16px; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      transition: box-shadow .2s;
+    }
+    .feature-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.07); }
+    .feature-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(61,90,128,.1);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px; font-size: 20px;
+    }
+    .feature-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── WALKTHROUGH ──────────────────────────────────── */
+    .walkthrough { max-width: 960px; margin: 0 auto; padding: 0 32px 100px; }
+    .walkthrough .section-header { margin-bottom: 64px; }
+
+    .step {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center;
+      margin-bottom: 80px;
+    }
+    .step.reverse { direction: rtl; }
+    .step.reverse > * { direction: ltr; }
+
+    .step-number {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .step h3 { font-size: 24px; font-weight: 700; letter-spacing: -.3px; margin-bottom: 12px; }
+    .step p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+    .step-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+    .tag {
+      font-size: 12px; padding: 4px 10px;
+      border-radius: 20px; border: 1px solid var(--border);
+      color: var(--muted); background: var(--surface);
+    }
+
+    .step-visual {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    }
+
+    /* mini todo list visual */
+    .mini-todo { display: flex; flex-direction: column; gap: 10px; }
+    .mini-row { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+    .mini-check {
+      width: 16px; height: 16px; border: 1.5px solid var(--accent);
+      border-radius: 3px; flex-shrink: 0;
+    }
+    .mini-check.done { background: var(--accent); display: flex; align-items: center; justify-content: center; }
+    .mini-check.done::after { content: '✓'; color: #fff; font-size: 10px; }
+    .mini-label.done { text-decoration: line-through; color: var(--placeholder); }
+
+    /* mini time blocks visual */
+    .mini-blocks { display: flex; flex-direction: column; gap: 8px; }
+    .mini-block {
+      display: flex; gap: 10px; align-items: center;
+      background: var(--bg); border-radius: 8px; padding: 10px 12px;
+    }
+    .mini-block-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .mini-block-info { flex: 1; }
+    .mini-block-name { font-size: 13px; font-weight: 500; }
+    .mini-block-time { font-size: 11px; color: var(--muted); }
+
+    /* brain dump visual */
+    .brain-dump-box {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px; font-size: 13px; color: var(--muted);
+      min-height: 80px; line-height: 1.6; margin-bottom: 12px;
+    }
+    .ai-result {
+      background: rgba(61,90,128,.06); border-radius: 8px;
+      padding: 12px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .ai-result-label { font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 2px; }
+    .ai-task { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+    .ai-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    /* sync visual */
+    .sync-devices {
+      display: flex; justify-content: center; gap: 24px; align-items: flex-end;
+    }
+    .device {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 16px;
+      text-align: center; font-size: 11px; color: var(--muted);
+    }
+    .device-icon { font-size: 28px; margin-bottom: 6px; }
+    .sync-arrow { font-size: 18px; color: var(--accent); align-self: center; opacity: .6; }
+    .sync-badge {
+      display: inline-block; background: rgba(61,90,128,.12);
+      color: var(--accent); font-size: 11px; font-weight: 600;
+      border-radius: 20px; padding: 3px 10px; margin-top: 12px;
+    }
+
+    /* ── COLORS STRIP ─────────────────────────────────── */
+    .color-strip {
+      display: flex; gap: 8px; margin-top: 16px;
+    }
+    .color-swatch {
+      flex: 1; height: 6px; border-radius: 3px;
+    }
+
+    /* ── TESTIMONIAL / QUOTE ─────────────────────────── */
+    .quote-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 32px;
+      text-align: center;
+    }
+    .quote-text {
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 600; line-height: 1.4;
+      max-width: 620px; margin: 0 auto 16px;
+      letter-spacing: -.2px;
+    }
+    .quote-text span { color: var(--accent); }
+    .quote-sub { color: var(--muted); font-size: 14px; }
+
+    /* ── CTA FOOTER ───────────────────────────────────── */
+    .cta-section {
+      max-width: 600px; margin: 0 auto;
+      padding: 100px 32px;
+      text-align: center;
+    }
+    .cta-section h2 { font-size: 36px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 12px; }
+    .cta-section p { color: var(--muted); margin-bottom: 32px; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer span { font-size: 13px; color: var(--muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 640px) {
+      .step { grid-template-columns: 1fr; }
+      .step.reverse { direction: ltr; }
+      nav .nav-links { display: none; }
+      .sync-devices { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">Paperly</span>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#download">Download</a>
+  </div>
+  <a href="https://github.com/zilan-turunc/paperly_app" target="_blank" rel="noopener" class="nav-cta">Get the app</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-eyebrow">Daily planner &amp; AI assistant</span>
+  <h1>Your day,<br><span>on paper.</span></h1>
+  <p>A beautifully simple planner that keeps each day clean and focused — todos, time blocks, and an AI that helps you figure out what to do next.</p>
+  <div class="hero-actions">
+    <a href="https://github.com/zilan-turunc/paperly_app" target="_blank" rel="noopener" class="btn-primary">Get the app</a>
+    <a href="#how-it-works" class="btn-secondary">See how it works</a>
+  </div>
+</section>
+
+<!-- PHONE MOCKUP -->
+<div class="phone-wrap">
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="phone-date">Thursday, June 19</div>
+    <div class="phone-title">Today</div>
+
+    <div class="phone-section-label">To-do</div>
+    <div class="todo-item">
+      <div class="todo-check done"></div>
+      <span class="todo-text done">Morning run</span>
+    </div>
+    <div class="todo-item">
+      <div class="todo-check done"></div>
+      <span class="todo-text done">Review design doc</span>
+    </div>
+    <div class="todo-item">
+      <div class="todo-check"></div>
+      <span class="todo-text">Call with Sarah</span>
+    </div>
+    <div class="todo-item">
+      <div class="todo-check"></div>
+      <span class="todo-text">Finish proposal draft</span>
+    </div>
+
+    <hr class="phone-divider" />
+
+    <div class="phone-section-label">Time blocks</div>
+    <div class="block-item">
+      <div class="block-bar" style="background:var(--slate)"></div>
+      <div class="block-info">
+        <div class="block-time">9:00 – 10:30</div>
+        <div class="block-name">Deep work</div>
+      </div>
+    </div>
+    <div class="block-item">
+      <div class="block-bar" style="background:var(--sage)"></div>
+      <div class="block-info">
+        <div class="block-time">11:00 – 12:00</div>
+        <div class="block-name">Team sync</div>
+      </div>
+    </div>
+    <div class="block-item">
+      <div class="block-bar" style="background:var(--terracotta)"></div>
+      <div class="block-info">
+        <div class="block-time">2:00 – 3:00</div>
+        <div class="block-name">Client call</div>
+      </div>
+    </div>
+    <div class="color-strip">
+      <div class="color-swatch" style="background:var(--slate)"></div>
+      <div class="color-swatch" style="background:var(--sage)"></div>
+      <div class="color-swatch" style="background:var(--terracotta)"></div>
+      <div class="color-swatch" style="background:var(--lavender)"></div>
+      <div class="color-swatch" style="background:var(--sand)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES GRID -->
+<section class="section" id="features">
+  <div class="section-header">
+    <h2>Everything you need. Nothing you don't.</h2>
+    <p>Paperly strips planning down to its essentials so you can spend your time doing, not organizing.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>One page per day</h3>
+      <p>Each day gets its own clean slate. No endless backlog — just today's tasks and schedule laid out simply.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⏱</div>
+      <h3>Time block scheduling</h3>
+      <p>Turn intentions into commitments by blocking out your time. Five curated colors keep things visually clear.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>AI day planner</h3>
+      <p>Brain-dump everything on your mind and let the AI turn it into an organized, time-blocked plan for the day.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📡</div>
+      <h3>Works offline</h3>
+      <p>Your data lives locally first. No connection? No problem. Everything syncs when you're back online.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">☁️</div>
+      <h3>Optional sync</h3>
+      <p>Sign in to back up your data and access it across all your devices. Or stay anonymous — totally up to you.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <h3>Paper-like design</h3>
+      <p>Warm cream tones and clean typography make Paperly feel like a real notebook, not another productivity tool.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE BREAK -->
+<div class="quote-section">
+  <p class="quote-text">Stop letting your to-do list live in <span>17 different places.</span> One day, one page, one plan.</p>
+  <span class="quote-sub">Paperly keeps it simple on purpose.</span>
+</div>
+
+<!-- WALKTHROUGH -->
+<section class="walkthrough" id="how-it-works">
+  <div class="section-header">
+    <h2>How it works</h2>
+    <p>Three simple steps from chaos to clarity.</p>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="step">
+    <div class="step-content">
+      <div class="step-number">Step 01</div>
+      <h3>Capture your todos</h3>
+      <p>Open today's page and jot down everything you need to do. Tasks are quick to add and satisfying to check off. Keep it simple — this is your list, not a project management system.</p>
+      <div class="step-tags">
+        <span class="tag">Quick add</span>
+        <span class="tag">Swipe to delete</span>
+        <span class="tag">Reorder freely</span>
+      </div>
+    </div>
+    <div class="step-visual">
+      <div class="mini-todo">
+        <div class="mini-row">
+          <div class="mini-check done"></div>
+          <span class="mini-label done">Reply to Mia's email</span>
+        </div>
+        <div class="mini-row">
+          <div class="mini-check done"></div>
+          <span class="mini-label done">Buy groceries</span>
+        </div>
+        <div class="mini-row">
+          <div class="mini-check"></div>
+          <span class="mini-label">Finish Q2 report</span>
+        </div>
+        <div class="mini-row">
+          <div class="mini-check"></div>
+          <span class="mini-label">Book dentist appointment</span>
+        </div>
+        <div class="mini-row">
+          <div class="mini-check"></div>
+          <span class="mini-label">30-min walk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step reverse">
+    <div class="step-content">
+      <div class="step-number">Step 02</div>
+      <h3>Block out your time</h3>
+      <p>Turn your day into a schedule with color-coded time blocks. See exactly when things are happening and how much room you actually have. No more over-committing.</p>
+      <div class="step-tags">
+        <span class="tag">5 block colors</span>
+        <span class="tag">Start &amp; end time</span>
+        <span class="tag">Scrollable timeline</span>
+      </div>
+    </div>
+    <div class="step-visual">
+      <div class="mini-blocks">
+        <div class="mini-block">
+          <div class="mini-block-dot" style="background:var(--slate)"></div>
+          <div class="mini-block-info">
+            <div class="mini-block-name">Deep work</div>
+            <div class="mini-block-time">9:00 AM – 11:00 AM</div>
+          </div>
+        </div>
+        <div class="mini-block">
+          <div class="mini-block-dot" style="background:var(--sage)"></div>
+          <div class="mini-block-info">
+            <div class="mini-block-name">Team standup</div>
+            <div class="mini-block-time">11:00 AM – 11:30 AM</div>
+          </div>
+        </div>
+        <div class="mini-block">
+          <div class="mini-block-dot" style="background:var(--sand)"></div>
+          <div class="mini-block-info">
+            <div class="mini-block-name">Lunch break</div>
+            <div class="mini-block-time">12:30 PM – 1:30 PM</div>
+          </div>
+        </div>
+        <div class="mini-block">
+          <div class="mini-block-dot" style="background:var(--terracotta)"></div>
+          <div class="mini-block-info">
+            <div class="mini-block-name">Client call</div>
+            <div class="mini-block-time">2:00 PM – 3:00 PM</div>
+          </div>
+        </div>
+        <div class="mini-block">
+          <div class="mini-block-dot" style="background:var(--lavender)"></div>
+          <div class="mini-block-info">
+            <div class="mini-block-name">Personal time</div>
+            <div class="mini-block-time">6:00 PM – 8:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step">
+    <div class="step-content">
+      <div class="step-number">Step 03</div>
+      <h3>Let AI do the heavy lifting</h3>
+      <p>Overwhelmed? Hit the brain-dump button and type out everything swirling in your head — tasks, worries, meetings, ideas. The AI reads it and hands you back a clean, prioritized, time-blocked plan.</p>
+      <div class="step-tags">
+        <span class="tag">Brain dump</span>
+        <span class="tag">AI scheduling</span>
+        <span class="tag">One tap to apply</span>
+      </div>
+    </div>
+    <div class="step-visual">
+      <div class="brain-dump-box">
+        need to write the proposal, have a 2pm call, want to go for a run, should follow up with Jake about the invoice, and maybe prep for tomorrow's presentation...
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+        <span style="color:var(--accent);">✦</span> AI plan ready
+      </div>
+      <div class="ai-result">
+        <div class="ai-result-label">Suggested plan</div>
+        <div class="ai-task"><div class="ai-dot"></div>9:00 – 10:30 · Write proposal</div>
+        <div class="ai-task"><div class="ai-dot"></div>11:00 – 11:15 · Follow up with Jake</div>
+        <div class="ai-task"><div class="ai-dot"></div>12:00 – 12:30 · Run</div>
+        <div class="ai-task"><div class="ai-dot"></div>2:00 – 3:00 · Client call</div>
+        <div class="ai-task"><div class="ai-dot"></div>4:00 – 5:00 · Prep presentation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step reverse">
+    <div class="step-content">
+      <div class="step-number">Step 04</div>
+      <h3>Your data, everywhere</h3>
+      <p>Sign in to sync across your iPhone, iPad, and more. Your pages are backed up automatically. Or skip sign-in entirely and work offline — Paperly never requires an account to be useful.</p>
+      <div class="step-tags">
+        <span class="tag">Offline first</span>
+        <span class="tag">Auto backup</span>
+        <span class="tag">No account needed</span>
+      </div>
+    </div>
+    <div class="step-visual" style="text-align:center;">
+      <div class="sync-devices">
+        <div class="device">
+          <div class="device-icon">📱</div>
+          iPhone
+        </div>
+        <div class="sync-arrow">⇄</div>
+        <div class="device">
+          <div class="device-icon">☁️</div>
+          Cloud
+        </div>
+        <div class="sync-arrow">⇄</div>
+        <div class="device">
+          <div class="device-icon">📱</div>
+          iPad
+        </div>
+      </div>
+      <br />
+      <span class="sync-badge">Always in sync</span>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section" id="download">
+  <h2>Start your first page today.</h2>
+  <p>Free to download. No subscription required. Works offline from day one.</p>
+  <div class="hero-actions">
+    <a href="https://github.com/zilan-turunc/paperly_app" target="_blank" rel="noopener" class="btn-primary">View on GitHub</a>
+    <a href="https://github.com/zilan-turunc/paperly_app/releases" target="_blank" rel="noopener" class="btn-secondary">Download releases</a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Paperly. Your day, on paper.</span>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
